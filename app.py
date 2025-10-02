@@ -56,18 +56,10 @@ if st.sidebar.button("تنفيذ الفلترة"):
     }
     df = pd.DataFrame(sample_data)
 
-    # --- عرض النتائج ---
+    # --- عرض النتائج داخل التطبيق فقط ---
     st.markdown("---")
     st.subheader("📈 الأسهم التي تجاوزت الفلترة")
     st.dataframe(df)
-
-    # --- زر تحميل النتائج ---
-    st.download_button(
-        label="📥 تحميل النتائج بصيغة CSV",
-        data=df.to_csv(index=False).encode('utf-8'),
-        file_name='filtered_stocks.csv',
-        mime='text/csv'
-    )
 
 # --- ملاحظة ختامية ---
 st.markdown("---")
