@@ -18,10 +18,38 @@ symbols = [
 ]
 
 # --- إعدادات الفلترة ---
+# --- إعدادات الفلترة ---
 st.sidebar.header("الفلترة")
 min_price, max_price = st.sidebar.slider("نطاق السعر (دولار)", 0, 2000, (50, 300))
 rsi_min, rsi_max = st.sidebar.slider("نطاق RSI", 0, 100, (30, 70))
 macd_enabled = st.sidebar.checkbox("فلترة MACD موجب فقط")
+sharia_enabled = st.sidebar.checkbox("فلترة شرعية (حسب الرموز الشرعية)")
+
+# --- قائمة رموز شرعية (مثال مبدئي) ---
+sharia_symbols = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]  # ← حدثها لاحقًا حسب قائمتك
+
+# --- تنفيذ الفلترة ---
+if st.sidebar.button("تنفيذ الفلترة"):
+    st.info("📡 جاري جلب البيانات من السوق الحقيقي...")
+    results = []
+    for symbol in symbols:
+        if sharia_enabled and symbol not in sharia_symbols:
+            continue
+        data = fetch_data(symbol)
+        if data["السعر"] is None or data["RSI"] is None:
+            continue
+        if not (min_price <= data["السعر"] <= max_price):
+            continue
+        if not (rsi_min <= data["RSI"] <= rsi_max):
+            continue
+        if macd_enabled and (data["MACD"] is None or data["MACD"] < 0):
+            continue
+        results.append(data)
+
+    df = pd.DataFrame(results)
+    st.success(f"✅ تم عرض {len(df)} سهم اجتاز الفلترة")
+    st.dataframe(df)
+
 
 # --- دالة لجلب البيانات ---
 def fetch_data(symbol):
