@@ -2,10 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
-# --- مفتاح API من Finnhub ---
 API_KEY = "d3eqb5pr01qh40ffhst0d3eqb5pr01qh40ffhstg"
 
-# --- قائمة الرموز (50 سهم أمريكي) ---
 symbols = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "META", "TSLA", "NVDA", "BRK.B", "JPM", "JNJ",
     "V", "PG", "UNH", "HD", "MA", "DIS", "BAC", "XOM", "KO", "PFE",
@@ -14,10 +12,8 @@ symbols = [
     "LOW", "AMAT", "SBUX", "ISRG", "MDT", "INTU", "BKNG", "BLK", "SPGI", "ZTS"
 ]
 
-# --- رموز شرعية (مثال مبدئي) ---
 sharia_symbols = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "NVDA", "PEP", "COST", "WMT", "ADBE"]
 
-# --- دالة جلب البيانات ---
 def fetch_data(symbol):
     try:
         quote = requests.get(f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={API_KEY}").json()
@@ -37,7 +33,6 @@ def fetch_data(symbol):
     except:
         return {"الرمز": symbol, "السعر": None, "RSI": None, "MACD": None}
 
-# --- واجهة الفلترة ---
 st.set_page_config(page_title="فلترة الأسهم", layout="wide")
 st.title("📊 فلترة الأسهم الأمريكية حسب المؤشرات الفنية")
 
@@ -47,7 +42,6 @@ rsi_min, rsi_max = st.sidebar.slider("نطاق RSI", 0, 100, (30, 70))
 macd_enabled = st.sidebar.checkbox("فلترة MACD موجب فقط")
 sharia_enabled = st.sidebar.checkbox("فلترة شرعية (حسب الرموز الشرعية)")
 
-# --- تنفيذ الفلترة ---
 if st.sidebar.button("تنفيذ الفلترة"):
     st.info("📡 جاري جلب البيانات من السوق الحقيقي...")
     results = []
